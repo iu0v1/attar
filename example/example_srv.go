@@ -1,8 +1,11 @@
+package main
+
 import (
-	"github.com/SpiritOfStallman/attar"
-	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
+
+	"github.com/SpiritOfStallman/attar"
+	"github.com/gorilla/mux"
 )
 
 // main page
@@ -23,6 +26,7 @@ func loginPageHandler(res http.ResponseWriter, req *http.Request) {
 	<html><head></head><body>
 	<center>
 	<form id="login_form" action="/login" method="POST" style="padding-top:15%;">
+	<p>user::qwerty</p>
 	<input type="text" name="login" placeholder="Login" autofocus><br>
 	<input type="password" placeholder="Password" name="password"><br>
 	<input type="submit" value="LOGIN">
