@@ -157,20 +157,22 @@ func (a *Attar) GlobalAuthProxy(next http.Handler) http.HandlerFunc {
 			http.Error(res, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
 		currentTime := time.Now().Local()
 
-		if val, ok := session.Values["loginTime"]; ok {
-			userLoginTimeRFC3339 := val
-			userLoginTime, err := time.Parse(time.RFC3339, userLoginTimeRFC3339.(string))
-			if err != nil {
-				http.Error(res, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			if int(currentTime.Sub(userLoginTime).Seconds()) > a.cookieOptions.SessionLifeTime {
-				http.Redirect(res, req, a.loginRoute, http.StatusFound)
-				return
-			}
-		} else {
+		val, ok := session.Values["loginTime"]
+		if !ok {
+			http.Redirect(res, req, a.loginRoute, http.StatusFound)
+			return
+		}
+
+		userLoginTime, err := time.Parse(time.RFC3339, val.(string))
+		if err != nil {
+			http.Error(res, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		if int(currentTime.Sub(userLoginTime).Seconds()) > a.cookieOptions.SessionLifeTime {
 			http.Redirect(res, req, a.loginRoute, http.StatusFound)
 			return
 		}
