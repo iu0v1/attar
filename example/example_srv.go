@@ -74,5 +74,7 @@ func main() {
 	http.Handle("/", a.GlobalAuthProxy(router))
 
 	// start net/httm server at 8080 port
-	http.ListenAndServe("127.0.0.1:8080", nil)
+	if err := http.ListenAndServe("127.0.0.1:8082", nil); err != nil {
+		panic(err)
+	}
 }
