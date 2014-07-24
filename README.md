@@ -85,4 +85,4 @@ func checkAuth(u, p string) bool {
 }
 ```
 
-For more information refer to pkg doc.
+For more information refer to pkg doc http://godoc.org/github.com/SpiritOfStallman/attar.

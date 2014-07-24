@@ -1,5 +1,3 @@
-// Лицензия, ёпта! :)
-
 /*
 	Attar package provide simple way to get http user auth (via sessions and cookie).
 
