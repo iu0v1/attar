@@ -159,8 +159,8 @@ func (a *Attar) GlobalAuthProxy(next http.Handler) http.HandlerFunc {
 		}
 		currentTime := time.Now().Local()
 
-		if session.Values["loginTime"] != nil {
-			userLoginTimeRFC3339 := session.Values["loginTime"]
+		if val, ok := session.Values["loginTime"]; ok {
+			userLoginTimeRFC3339 := val
 			userLoginTime, err := time.Parse(time.RFC3339, userLoginTimeRFC3339.(string))
 			if err != nil {
 				http.Error(res, err.Error(), http.StatusInternalServerError)
