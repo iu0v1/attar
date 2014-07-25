@@ -9,20 +9,18 @@ import (
 )
 
 // main page
-func mainPageHandler(res http.ResponseWriter, req *http.Request) {
-	var mainPage string = `
+var mainPage = template.Must(template.New("").Parse(`
 	<html><head></head><body><center>
 	<h1 style="padding-top:15%;">HELLO!</h1>
 	</form></center></body>
-	</html>`
-	page := template.New("main")
-	page, _ = page.Parse(mainPage)
-	page.Execute(res, "")
+	</html>`))
+
+func mainPageHandler(res http.ResponseWriter, req *http.Request) {
+	mainPage.Execute(res, nil)
 }
 
 // login page
-func loginPageHandler(res http.ResponseWriter, req *http.Request) {
-	var loginPage string = `
+var loginPage = template.Must(template.New("").Parse(`
 	<html><head></head><body>
 	<center>
 	<form id="login_form" action="/login" method="POST" style="padding-top:15%;">
@@ -31,10 +29,10 @@ func loginPageHandler(res http.ResponseWriter, req *http.Request) {
 	<input type="password" placeholder="Password" name="password"><br>
 	<input type="submit" value="LOGIN">
 	</form></center></body>
-	</html>`
-	page := template.New("main")
-	page, _ = page.Parse(loginPage)
-	page.Execute(res, "")
+	</html>`))
+
+func loginPageHandler(res http.ResponseWriter, req *http.Request) {
+	loginPage.Execute(res, nil)
 }
 
 // auth provider function
@@ -76,5 +74,7 @@ func main() {
 	http.Handle("/", a.GlobalAuthProxy(router))
 
 	// start net/httm server at 8080 port
-	http.ListenAndServe("127.0.0.1:8080", nil)
+	if err := http.ListenAndServe("127.0.0.1:8082", nil); err != nil {
+		panic(err)
+	}
 }
