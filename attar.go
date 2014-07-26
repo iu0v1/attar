@@ -5,39 +5,41 @@
 	(http://github.com/gorilla/sessions).
 
 	Usable example:
+		package main
+
 		import (
-			"github.com/gorilla/mux"
 			"html/template"
-			"github.com/SpiritOfStallman/attar"
 			"net/http"
+
+			"github.com/SpiritOfStallman/attar"
+			"github.com/gorilla/mux"
 		)
 
 		// main page
-		func mainPageHandler(res http.ResponseWriter, req *http.Request) {
-			var mainPage string = `
+		var mainPage = template.Must(template.New("").Parse(`
 			<html><head></head><body><center>
 			<h1 style="padding-top:15%;">HELLO!</h1>
 			</form></center></body>
-			</html>`
-			page := template.New("main")
-			page, _ = page.Parse(mainPage)
-			page.Execute(res, "")
+			</html>`))
+
+		func mainPageHandler(res http.ResponseWriter, req *http.Request) {
+			mainPage.Execute(res, nil)
 		}
 
 		// login page
-		func loginPageHandler(res http.ResponseWriter, req *http.Request) {
-			var loginPage string = `
+		var loginPage = template.Must(template.New("").Parse(`
 			<html><head></head><body>
 			<center>
 			<form id="login_form" action="/login" method="POST" style="padding-top:15%;">
+			<p>user::qwerty</p>
 			<input type="text" name="login" placeholder="Login" autofocus><br>
 			<input type="password" placeholder="Password" name="password"><br>
 			<input type="submit" value="LOGIN">
 			</form></center></body>
-			</html>`
-			page := template.New("main")
-			page, _ = page.Parse(loginPage)
-			page.Execute(res, "")
+			</html>`))
+
+		func loginPageHandler(res http.ResponseWriter, req *http.Request) {
+			loginPage.Execute(res, nil)
 		}
 
 		// auth provider function
@@ -61,7 +63,7 @@
 				MaxAge:                     30,
 				HttpOnly:                   true,
 				SessionName:                "test-session",
-				SessionLifeTime:            15,
+				SessionLifeTime:            30,
 				LoginFormUserFieldName:     "login",
 				LoginFormPasswordFieldName: "password",
 			}
@@ -79,8 +81,11 @@
 			http.Handle("/", a.GlobalAuthProxy(router))
 
 			// start net/httm server at 8080 port
-			http.ListenAndServe("127.0.0.1:8080", nil)
+			if err := http.ListenAndServe("127.0.0.1:8082", nil); err != nil {
+				panic(err)
+			}
 		}
+
 	For more information - look at the pkg doc.
 */
 package attar

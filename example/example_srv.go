@@ -56,7 +56,7 @@ func main() {
 		MaxAge:                     30,
 		HttpOnly:                   true,
 		SessionName:                "test-session",
-		SessionLifeTime:            15,
+		SessionLifeTime:            30,
 		LoginFormUserFieldName:     "login",
 		LoginFormPasswordFieldName: "password",
 	}
