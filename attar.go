@@ -64,6 +64,8 @@
 				HttpOnly:                   true,
 				SessionName:                "test-session",
 				SessionLifeTime:            30,
+				SessionBindUseragent:       true,
+				SessionBindUserHost:        true,
 				LoginFormUserFieldName:     "login",
 				LoginFormPasswordFieldName: "password",
 			}
@@ -92,6 +94,7 @@ package attar
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gorilla/sessions"
@@ -122,6 +125,12 @@ type AttarOptions struct {
 	// name of cookie browser session
 	SessionName     string // default: "attar-session"
 	SessionLifeTime int    // default: 86400; in sec
+
+	// bind browser useragent to cookie
+	SessionBindUseragent bool
+
+	// bind user IP addr to cookie
+	SessionBindUserHost bool
 
 	// html field names, to retrieve
 	// user name and password from
@@ -182,6 +191,32 @@ func (a *Attar) GlobalAuthProxy(next http.Handler) http.HandlerFunc {
 			return
 		}
 
+		if a.cookieOptions.SessionBindUseragent {
+			val, ok = session.Values["useragent"]
+			if !ok {
+				http.Redirect(res, req, a.loginRoute, http.StatusFound)
+				return
+			}
+
+			if req.UserAgent() != val.(string) {
+				http.Redirect(res, req, a.loginRoute, http.StatusFound)
+				return
+			}
+		}
+
+		if a.cookieOptions.SessionBindUserHost {
+			val, ok = session.Values["userHost"]
+			if !ok {
+				http.Redirect(res, req, a.loginRoute, http.StatusFound)
+				return
+			}
+
+			if strings.Split(req.RemoteAddr, ":")[0] != val.(string) {
+				http.Redirect(res, req, a.loginRoute, http.StatusFound)
+				return
+			}
+		}
+
 		next.ServeHTTP(res, req)
 	}
 }
@@ -206,6 +241,13 @@ func (a *Attar) AuthHandler(res http.ResponseWriter, req *http.Request) {
 
 		session.Values["user"] = req.FormValue(a.cookieOptions.LoginFormUserFieldName)
 		session.Values["loginTime"] = currentTime.Format(time.RFC3339)
+
+		// even if SessionBindUseragent or SessionBindUserHost is false -
+		// this data save to cookie, for option change without
+		// having to user relogin (and cookie re-get)
+		session.Values["userHost"] = strings.Split(req.RemoteAddr, ":")[0]
+		session.Values["useragent"] = req.UserAgent()
+
 		session.Save(req, res)
 
 		http.Redirect(res, req, "/", http.StatusFound)
@@ -280,6 +322,8 @@ func New() *Attar {
 		cookieOptions: &AttarOptions{
 			SessionName:                "attar-session",
 			SessionLifeTime:            86400,
+			SessionBindUseragent:       true,
+			SessionBindUserHost:        true,
 			LoginFormUserFieldName:     "login",
 			LoginFormPasswordFieldName: "password",
 		},
