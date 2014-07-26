@@ -49,14 +49,20 @@ func main() {
 
 	a.SetAuthProvider(checkAuth)
 	a.SetLoginRoute("/login")
+	a.SetCookieSessionKeys(
+		[]byte("261AD9502C583BDQQQQQQQQQQQQQQQQQ"),
+		[]byte("RRRRRRRRRRRRRRR3FC5C7B3D6E4DDAFF"),
+	)
 
 	// set options, with session & cookie lifetime == 30 sec
 	options := &attar.AttarOptions{
 		Path:                       "/",
-		MaxAge:                     30,
+		MaxAge:                     60,
 		HttpOnly:                   true,
 		SessionName:                "test-session",
-		SessionLifeTime:            30,
+		SessionLifeTime:            60,
+		SessionBindUseragent:       true,
+		SessionBindUserHost:        true,
 		LoginFormUserFieldName:     "login",
 		LoginFormPasswordFieldName: "password",
 	}
