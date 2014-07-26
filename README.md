@@ -74,10 +74,10 @@ func main() {
     // set options, with session & cookie lifetime == 30 sec
     options := &attar.AttarOptions{
         Path:                       "/",
-        MaxAge:                     60,
+        MaxAge:                     30,
         HttpOnly:                   true,
         SessionName:                "test-session",
-        SessionLifeTime:            60,
+        SessionLifeTime:            30,
         SessionBindUseragent:       true,
         SessionBindUserHost:        true,
         LoginFormUserFieldName:     "login",
@@ -156,7 +156,7 @@ import (
 )
 
 func main() {
-    ..
+    ...
     gorillaSessions := sessions.NewCookieStore(
         []byte("261AD9502C583BD7D8AA03083598653B"),
         []byte("E9F6FDFAC2772D33FC5C7B3D6E4DDAFF"),
@@ -164,7 +164,7 @@ func main() {
     ..
     a := attar.New()
     a.SetGorillaCookieStore(gorillaSessions)
-    ..
+    ...
 }
 ```
 
