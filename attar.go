@@ -267,14 +267,44 @@ func (a *Attar) SetLoginRoute(r string) {
 /*
 	Set 'gorilla/sessions' session cookie keys.
 
+	Attention! Conflict with attar.SetGorillaCookieStore.
+
 	For more information about NewCookieStore() refer
 	to http://www.gorillatoolkit.org/pkg/sessions#NewCookieStore.
 */
-func (a *Attar) CookieSessionKeys(authKey, encryptionKey []byte) {
+func (a *Attar) SetCookieSessionKeys(authKey, encryptionKey []byte) {
 	a.cookieStore = sessions.NewCookieStore(
 		authKey,
 		encryptionKey,
 	)
+}
+
+/*
+	Set pre-define 'gorilla/sessions' CookieStore as attar CookieStore.
+
+	Attention! Conflict with attar.SetCookieSessionKeys.
+
+	Example:
+		import (
+			"github.com/gorilla/sessions"
+			"github.com/SpiritOfStallman/attar"
+		)
+
+		func main() {
+			..
+			gorillaSessions := sessions.NewCookieStore(
+				[]byte("261AD9502C583BD7D8AA03083598653B"),
+				[]byte("E9F6FDFAC2772D33FC5C7B3D6E4DDAFF"),
+			)
+			..
+			a := attar.New()
+			a.SetGorillaCookieStore(gorillaSessions)
+			..
+		}
+
+*/
+func (a *Attar) SetGorillaCookieStore(c *sessions.CookieStore) {
+	a.cookieStore = c
 }
 
 // type for auth provider function
