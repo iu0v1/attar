@@ -286,6 +286,9 @@ type authProvider (func(u, p string) bool)
 	User functon must take 'user' and 'password' arguments, and return
 	true (if user auth successfully) or false (if auth data false).
 
+	As alternative use preset attar auth provider functions (like
+	attar.SimpleAuthProvider)
+
 	Example of auth provider function:
 		// user code
 		func checkAuth(u, p string) bool {
@@ -302,6 +305,32 @@ type authProvider (func(u, p string) bool)
 */
 func (a *Attar) SetAuthProvider(f authProvider) {
 	a.authProviderFunc = f
+}
+
+/*
+	User auth provider function, for simple user/password check.
+
+	Example of usage:
+		// users list based on map[user]password
+		userList := map[string]string{
+			"user":  "qwerty",
+			"admin": "asdfgh",
+		}
+
+		a := attar.New()
+		a.SetAuthProvider(a.SimpleAuthProvider(userList))
+*/
+func (a *Attar) SimpleAuthProvider(userlist map[string]string) authProvider {
+	return func(u, p string) bool {
+		pass, ok := userlist[u]
+		if !ok {
+			return false
+		}
+		if p != pass {
+			return false
+		}
+		return true
+	}
 }
 
 /*
