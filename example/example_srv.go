@@ -57,10 +57,10 @@ func main() {
 	// set options, with session & cookie lifetime == 30 sec
 	options := &attar.AttarOptions{
 		Path:                       "/",
-		MaxAge:                     60,
+		MaxAge:                     30,
 		HttpOnly:                   true,
 		SessionName:                "test-session",
-		SessionLifeTime:            60,
+		SessionLifeTime:            30,
 		SessionBindUseragent:       true,
 		SessionBindUserHost:        true,
 		LoginFormUserFieldName:     "login",

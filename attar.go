@@ -56,6 +56,10 @@
 
 			a.SetAuthProvider(checkAuth)
 			a.SetLoginRoute("/login")
+			a.SetCookieSessionKeys(
+				[]byte("261AD9502C583BDQQQQQQQQQQQQQQQQQ"),
+				[]byte("RRRRRRRRRRRRRRR3FC5C7B3D6E4DDAFF"),
+			)
 
 			// set options, with session & cookie lifetime == 30 sec
 			options := &attar.AttarOptions{
