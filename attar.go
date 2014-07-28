@@ -97,6 +97,7 @@
 package attar
 
 import (
+	"crypto/subtle"
 	"net/http"
 	"strings"
 	"time"
@@ -360,7 +361,10 @@ func (a *Attar) SimpleAuthProvider(userlist map[string]string) authProvider {
 		if !ok {
 			return false
 		}
-		if p != pass {
+		if len(p) != len(pass) {
+			return false
+		}
+		if subtle.ConstantTimeCompare([]byte(pass), []byte(p)) != 1 {
 			return false
 		}
 		return true
