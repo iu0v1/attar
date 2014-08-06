@@ -9,6 +9,7 @@ package attar
 
 import (
 	"crypto/subtle"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -66,6 +67,13 @@ func (a *Attar) SetAttarOptions(o *AttarOptions) {
 	Function for check auth session.
 */
 func (a *Attar) GlobalAuthProxy(next http.Handler) http.HandlerFunc {
+	// сheck mandatory parameters
+	if a.loginRoute == "" {
+		log.Fatalf("attar error: login route not declared (SetLoginRoute)")
+	}
+	if a.authProviderFunc == nil {
+		log.Fatalf("attar error: auth provider not declared (SetAuthProvider)")
+	}
 	return func(res http.ResponseWriter, req *http.Request) {
 		if req.URL.Path == a.loginRoute {
 			next.ServeHTTP(res, req)
