@@ -170,4 +170,4 @@ func main() {
 
 DOC
 =====
-For more information refer to pkg doc http://godoc.org/github.com/SpiritOfStallman/attar.
+For more information refer to pkg [doc](http://godoc.org/github.com/iu0v1/attar).
