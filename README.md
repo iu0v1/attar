@@ -1,3 +1,6 @@
+#  **THIS PACKAGE IS DEPRECATED**.
+Please, use the reincarnation of this package. [Gelada](https://github.com/iu0v1/gelada).
+
 Attar
 =====
 
@@ -8,7 +11,7 @@ Pkg for use with gorilla/mux router.
 Get Attar
 =====
 ```
-go get github.com/SpiritOfStallman/attar
+go get github.com/iu0v1/attar
 ```
 
 Usage
@@ -21,7 +24,7 @@ import (
     "html/template"
     "net/http"
 
-    "github.com/SpiritOfStallman/attar"
+    "github.com/iu0v1/attar"
     "github.com/gorilla/mux"
 )
 
@@ -104,7 +107,7 @@ func main() {
 ```
 
 ### User AuthProvider
-User functon must take 'user' and 'password' arguments, and return true (if user auth successfully) or false (if auth data false). 
+User functon must take 'user' and 'password' arguments, and return true (if user auth successfully) or false (if auth data false).
 ```Go
 // user code
 func checkAuth(u, p string) bool {
